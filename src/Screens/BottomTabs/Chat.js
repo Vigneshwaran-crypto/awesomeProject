@@ -9,6 +9,6 @@ const Chat = () => {
   );
 };
 
-export default Chat;
-
 const styles = StyleSheet.create({});
+
+export default Chat;

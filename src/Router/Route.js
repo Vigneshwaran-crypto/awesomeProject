@@ -2,16 +2,26 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
+import {colors} from '../Common/colors';
 
 //screens importing
 import Application from '../app/Application';
 import LogIn from '../auth/LogIn';
+
+//bottomTAB bar
 import Home from '../Screens/BottomTabs/Home';
 import Chat from '../Screens/BottomTabs/Chat';
 import Profile from '../Screens/BottomTabs/Profile';
+
+//modalTabBar
+import Cart from '../ModalTabs/Cart';
+import Bank from '../ModalTabs/Bank';
+import Call from '../ModalTabs/Call';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {LOG} from '../Common/utils';
+import {navigationRef} from './RootNavigation';
 
 const Route = () => {
   const Stack = createNativeStackNavigator();
@@ -27,26 +37,24 @@ const Route = () => {
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
-            {
-              LOG('route name arrived :', route.name);
-            }
-            if (route.name === 'home') {
+
+            if (route.name === 'Home') {
               return (
-                <View>
+                <View style={styles.tabIconView}>
                   <Feather name="home" color={color} size={size} />
                   <Text style={{color: color}}>Home</Text>
                 </View>
               );
             } else if (route.name === 'chat') {
               return (
-                <View>
+                <View style={styles.tabIconView}>
                   <Feather name="droplet" color={color} size={size} />
                   <Text style={{color: color}}>Chat</Text>
                 </View>
               );
             } else if (route.name === 'profile') {
               return (
-                <View>
+                <View style={styles.tabIconView}>
                   <Feather name="github" color={color} size={size} />
                   <Text style={{color: color}}>Profile</Text>
                 </View>
@@ -60,13 +68,13 @@ const Route = () => {
 
           tabBarStyle: {
             position: 'absolute',
-            backgroundColor: '#2E4F4F',
+            backgroundColor: '#B3E5BE',
           },
           tabBarShowLabel: false,
         })}
         initialRouteName="home">
         <Tab.Screen
-          name="home"
+          name="Home"
           component={Home}
           title={'home'}
           options={{
@@ -97,8 +105,63 @@ const Route = () => {
     );
   };
 
+  const ModalTab = () => {
+    const Tab = createBottomTabNavigator();
+
+    return (
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.activeGreen,
+          tabBarShowLabel: false,
+        }}>
+        <Tab.Screen
+          name="cart"
+          component={Cart}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <View>
+                <Feather name="home" color={color} size={size} />
+                <Text style={{color: color}}>Cart</Text>
+              </View>
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="bank"
+          component={Bank}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <View>
+                <Feather name="home" color={color} size={size} />
+                <Text style={{color: color}}>Bank</Text>
+              </View>
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="call"
+          component={Call}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <View>
+                <Feather name="home" color={color} size={size} />
+                <Text style={{color: color}}>call</Text>
+              </View>
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen
           name="application"
@@ -117,9 +180,22 @@ const Route = () => {
           component={HomeTab}
           options={{headerShown: false}}
         />
+
+        <Stack.Screen
+          name="modalTab"
+          component={ModalTab}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  tabIconView: {
+    alignItems: 'center',
+  },
+  tabTitleText: {},
+});
 
 export default Route;
