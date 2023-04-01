@@ -19,13 +19,16 @@ import Bank from '../ModalTabs/Bank';
 import Call from '../ModalTabs/Call';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import {StyleSheet, Text, View} from 'react-native';
 import {LOG} from '../Common/utils';
 import {navigationRef} from './RootNavigation';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const Route = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+  const Drawer = createDrawerNavigator();
 
   const HomeTab = () => {
     {
@@ -114,6 +117,7 @@ const Route = () => {
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.activeGreen,
           tabBarShowLabel: false,
+          tabBarStyle: {backgroundColor: colors.barBilled},
         }}>
         <Tab.Screen
           name="cart"
