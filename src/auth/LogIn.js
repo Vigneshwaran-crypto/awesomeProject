@@ -2,143 +2,274 @@ import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {WalkthroughElement} from 'react-native-walkthrough';
-import ListItem from '../Screens/ListItems/ListItem';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {useNavigation} from '@react-navigation/native';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../Common/colors';
-import {LOG} from '../Common/utils';
-import moment from 'moment';
-import Feather from 'react-native-vector-icons/Feather';
+import {LOG, Toast} from '../Common/utils';
+import {Checkbox} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {apiCall} from '../RTK/ReducersRtk';
+import {getAllProducts, getUserDetails} from '../RTK/RtkActions';
+import auth from '@react-native-firebase/auth';
 
-const LogIn = () => {
+const LogIn = props => {
   const navigation = useNavigation();
-  const [listData, setListData] = useState([]);
-  const [show, setShow] = useState(false);
-  const RBref = useRef();
+  const type = props.route.params.type;
+  const [isChecked, setIsCheck] = useState(false);
+  const dispatch = useDispatch();
+  const products = useSelector(({products}) => products);
+
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
-    axios
-      .get('https://mocki.io/v1/0154e81f-d2ec-44b5-9a48-966be1a7310c')
-      .then(response => {
-        console.log('response value in login :', response);
-        setListData(response.data);
-      })
-      .catch(err => {
-        console.log('err in login :', err);
-      });
+    LOG('props log in login :', type);
+    // LOG('products in Log In :', products);
+  }, [products]);
 
-    console.log('list Data :', listData);
-  }, []);
+  const validateOnPress = value => {
+    LOG('Button aclicked');
+    // dispatch(apiCall(getUserDetails()));
 
-  useEffect(() => {}, []);
+    LOG('user Name password :', password);
 
-  const date = Date();
+    if (type == 'logIn') {
+      // navigation.push('logIn', {type: 'join'});
+    } else {
+      // navigation.navigate('verify');
 
-  const newDate = new Date();
+      const userNameValid = isValidMail();
 
-  const demoClick = () => {
-    // setShow(true);
-    // navigation.navigate('home');
-    // RBref.current.open();
+      if (!userNameValid) {
+        Toast('Please enter valid email');
+      } else if (!password) {
+        Toast('Please enter password');
+      } else {
+        try {
+          const createUser = auth().createUserWithEmailAndPassword(
+            userName,
+            password,
+          );
 
-    navigation.navigate('homeTab');
+          LOG('after user created  :', createUser);
 
-    LOG('date :', date);
-
-    LOG('new date :', newDate);
-
-    LOG('moment value :', moment(newDate).format('DD/MM/YYYY'));
+          createUser
+            .then(res => {
+              LOG('response ', res);
+              if (res.user._auth._authResult) {
+                navigation.goBack();
+              } else {
+                Toast('Please Try agin');
+              }
+            })
+            .catch(err => {
+              LOG('err in userCreate Catch :', err);
+              Toast('Please try again');
+            });
+        } catch (err) {
+          LOG('cath in acc creater :', err);
+        }
+      }
+    }
   };
 
-  const renderItem = ({item}) => {
-    return <ListItem item={item} />;
+  const logInClick = () => {
+    const userNameValid = isValidMail();
+    if (!userNameValid) {
+      Toast('Please enter valid email');
+    } else if (!password) {
+      Toast('please enter the password');
+    } else if (!userName && !password) {
+      Toast('Please enter email and password ');
+    } else {
+      const sigIn = auth().signInWithEmailAndPassword(userName, password);
+
+      sigIn
+        .then(res => {
+          LOG('res value of signIn :', res);
+          if (res.user._auth._authResult) {
+            navigation.navigate('modalTab');
+          }
+        })
+        .catch(err => {
+          LOG('catch in sigIn :', err);
+          Toast('Please enter valid credential');
+        });
+    }
+  };
+
+  const isValidMail = () => {
+    const mail = userName.split('');
+    let haveAt = false;
+    let haveDot = false;
+
+    mail.forEach(item => {
+      if (item == '@') {
+        haveAt = true;
+      } else if (item == '.') {
+        haveDot = true;
+      }
+    });
+
+    if (haveAt && haveDot) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={demoClick}>
-        <Text style={styles.buttontext}>Modal Button</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <Image
+          style={styles.baseImage}
+          source={require('../../Assets/baselogIn.png')}
+        />
 
-      <FlatList
-        data={listData}
-        style={styles.listView}
-        renderItem={renderItem}
-        ListEmptyComponent={() => (
-          <View>
-            <Text>No Data </Text>
+        <View style={styles.authContent}>
+          <Text
+            style={[
+              styles.welcomeText,
+              {display: type == 'logIn' ? 'flex' : 'none'},
+            ]}>
+            Welcome to the world full of possibilities
+          </Text>
+
+          <View style={styles.inputContent}>
+            <Text style={styles.inputLabel}>Email or Phone</Text>
+            <TextInput onChangeText={setUserName} style={styles.inputFields} />
+
+            <Text style={styles.inputLabel}>
+              {type == 'logIn' ? 'password' : 'Set a Password'}
+            </Text>
+            <TextInput onChangeText={setPassword} style={styles.inputFields} />
+
+            <Text
+              style={[
+                styles.forgotText,
+                {display: type == 'logIn' ? 'flex' : 'none'},
+              ]}>
+              Forgot Password?
+            </Text>
           </View>
-        )}
-      />
 
-      <RBSheet
-        height={500}
-        ref={RBref}
-        // closeOnDragDown={true}
-        openDuration={100}
-        closeDuration={100}
-        closeOnPressMask={true}
-        customStyles={{
-          container: styles.RBSheetStyle,
-        }}>
-        <View style={styles.belt}>
-          <View style={styles.buckle}></View>
+          {type == 'logIn' ? (
+            <TouchableOpacity style={styles.joinButton} onPress={logInClick}>
+              <Text style={styles.joinButtontext}>Log In</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.checkBoxView}>
+              <Checkbox
+                status={isChecked ? 'checked' : 'unchecked'}
+                onPress={() => setIsCheck(!isChecked)}
+              />
+
+              <Text style={styles.checkBoxText}>
+                Agree to the{' '}
+                <Text style={styles.termsText}> terms & Conditions </Text>
+              </Text>
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={type == 'logIn' ? styles.logInButton : styles.joinButton}
+            onPress={validateOnPress}>
+            <Text
+              style={
+                type == 'logIn' ? styles.buttonText : styles.joinButtontext
+              }>
+              {type == 'logIn' ? 'New user - Join Now' : 'Join Now'}
+            </Text>
+          </TouchableOpacity>
         </View>
-
-        <Feather name="home" size={30} />
-
-        <View style={{flexDirection: 'row', height: '100%', width: '100%'}}>
-          <View style={styles.leg}></View>
-
-          <View style={styles.leg}></View>
-        </View>
-      </RBSheet>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  listView: {
-    marginVertical: 40,
+  contentContainer: {
+    // borderWidth: 1,
   },
-  button: {
-    backgroundColor: 'green',
+
+  baseImage: {
+    height: 350,
+    width: 350,
+  },
+  authContent: {
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  welcomeText: {
+    fontWeight: 'bold',
+    fontSize: 23,
+    color: '#2A4E8B',
+  },
+  inputContent: {
+    marginVertical: 25,
+  },
+  inputLabel: {
+    marginVertical: 5,
+    color: colors.black,
+    fontSize: 16,
+  },
+  inputFields: {
+    borderWidth: 1,
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  forgotText: {
+    color: '#0A66C2',
+    alignSelf: 'flex-end',
+    fontWeight: 'bold',
+  },
+  logInButton: {
     alignSelf: 'center',
-    marginVertical: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 10,
+    marginVertical: 20,
   },
-  buttontext: {
-    color: 'white',
+  buttonText: {
+    color: '#0A66C2',
+
+    textDecorationLine: 'underline',
   },
-  RBSheetStyle: {
-    backgroundColor: 'white',
+  joinButton: {
+    backgroundColor: '#0A66C2',
+
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    marginVertical: 20,
   },
-  belt: {
-    backgroundColor: '#4D4D4D',
-    height: '8%',
-  },
-  buckle: {
-    width: 70,
-    height: '100%',
-    backgroundColor: '#00235B',
+  joinButtontext: {
+    color: colors.white,
+    fontWeight: 'bold',
     alignSelf: 'center',
   },
-  leg: {
-    height: '100%',
-    backgroundColor: '#8F43EE',
+  checkBoxView: {
+    marginTop: -20,
+    flexDirection: 'row',
+    marginStart: -9,
+  },
+  checkBoxText: {
+    alignSelf: 'center',
+    color: colors.black,
+  },
+  termsText: {
+    textDecorationLine: 'underline',
   },
 });
 

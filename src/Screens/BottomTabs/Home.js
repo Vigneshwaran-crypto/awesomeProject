@@ -15,6 +15,8 @@ import * as RootNavigation from '../../Router/RootNavigation';
 
 const Home = () => {
   const navigation = useNavigation();
+  const RBref = useRef();
+
   const clicked = () => {
     LOG('button Clicked');
 
@@ -32,6 +34,29 @@ const Home = () => {
       <TouchableOpacity onPress={clicked}>
         <Text style={styles.buttonText}>click Me</Text>
       </TouchableOpacity>
+
+      <RBSheet
+        height={500}
+        ref={RBref}
+        // closeOnDragDown={true}
+        openDuration={100}
+        closeDuration={100}
+        closeOnPressMask={true}
+        customStyles={{
+          container: styles.RBSheetStyle,
+        }}>
+        <View style={styles.belt}>
+          <View style={styles.buckle}></View>
+        </View>
+
+        <Feather name="home" size={30} />
+
+        <View style={{flexDirection: 'row', height: '100%', width: '100%'}}>
+          <View style={styles.leg}></View>
+
+          <View style={styles.leg}></View>
+        </View>
+      </RBSheet>
     </View>
   );
 };

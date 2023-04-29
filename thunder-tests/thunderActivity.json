@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "d785666c-2ae9-42f8-937c-b092e5776ad6",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://fakestoreapi.com/products",
+    "url": "https://fakestoreapi.com/products",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-04-16T10:21:37.932Z",
+    "modified": "2023-04-16T10:21:37.932Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

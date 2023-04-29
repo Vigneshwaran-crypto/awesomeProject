@@ -7,6 +7,8 @@ import {colors} from '../Common/colors';
 //screens importing
 import Application from '../app/Application';
 import LogIn from '../auth/LogIn';
+import Verify from '../Screens/WISDOM/Verify';
+import LastStep from '../Screens/WISDOM/LastStep';
 
 //bottomTAB bar
 import Home from '../Screens/BottomTabs/Home';
@@ -18,9 +20,13 @@ import Cart from '../ModalTabs/Cart';
 import Bank from '../ModalTabs/Bank';
 import Call from '../ModalTabs/Call';
 
+//Drawer menu
+import Settings from '../Screens/drawerMenu/Settings';
+import Help from '../Screens/drawerMenu/Help';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {LOG} from '../Common/utils';
 import {navigationRef} from './RootNavigation';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -28,7 +34,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 const Route = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-  const Drawer = createDrawerNavigator();
 
   const HomeTab = () => {
     {
@@ -176,6 +181,18 @@ const Route = () => {
         <Stack.Screen
           name="logIn"
           component={LogIn}
+          options={{headerShown: false, animation: 'slide_from_right'}}
+        />
+
+        <Stack.Screen
+          name="verify"
+          component={Verify}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="lastStep"
+          component={LastStep}
           options={{headerShown: false}}
         />
 
@@ -190,10 +207,73 @@ const Route = () => {
           component={ModalTab}
           options={{headerShown: false}}
         />
+
+        {/* <Stack.Screen
+          name="settings"
+          component={Settings}
+          options={{headerShown: false}}
+        /> */}
+        {/* <Stack.Screen
+          name="help"
+          component={Help}
+          options={{headerShown: false}}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+// DRAWER MENU IMPLEMENTATION
+
+const SettingFun = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="settings"
+      screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="settings"
+        component={Settings}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const HelpFun = ({navigation}) => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="help"
+        component={Help}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const Drawer = () => {
+  const Drawer = createDrawerNavigator();
+
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="settings">
+        <Drawer.Screen
+          name="settings"
+          component={SettingFun}
+          options={{headerShown: false}}
+        />
+
+        <Drawer.Screen
+          name="help"
+          component={HelpFun}
+          options={{headerShown: false}}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+};
+
+// DRAWER MENU IMPLEMENTATION ENDED
 
 const styles = StyleSheet.create({
   tabIconView: {
