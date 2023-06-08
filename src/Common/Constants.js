@@ -1,6 +1,7 @@
 export const GET_API_DATA = 'GET_API_DATA';
 export const API_DATA_RECEIVED = 'API_DATA_RECEIVED';
 export const RESET_REDUX_STORE = 'RESET_REDUX_STORE';
+export const JUST_STORE = 'JUST_STORE';
 
 export const AuthToken = 'Bearer ';
 
@@ -13,6 +14,9 @@ export const StaticValues = {
 
   getUserDetails: 'getUserDetails',
   getSingleUser: 'getSingleUser',
+
+  //official
+  saveUserDetails: 'saveUserDetails',
 };
 
 export const HTTP = {

@@ -17,7 +17,7 @@ import Profile from '../Screens/BottomTabs/Profile';
 
 //modalTabBar
 import Cart from '../ModalTabs/Cart';
-import Bank from '../ModalTabs/Bank';
+import Message from '../ModalTabs/Message';
 import Call from '../ModalTabs/Call';
 
 //Drawer menu
@@ -119,10 +119,11 @@ const Route = () => {
     return (
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor: colors.accent,
-          tabBarInactiveTintColor: colors.activeGreen,
+          tabBarActiveTintColor: colors.white,
+          tabBarInactiveTintColor: colors.grey,
           tabBarShowLabel: false,
-          tabBarStyle: {backgroundColor: colors.barBilled},
+          tabBarStyle: {backgroundColor: colors.gradientColor},
+          tabBarHideOnKeyboard: true,
         }}>
         <Tab.Screen
           name="cart"
@@ -130,8 +131,8 @@ const Route = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({focused, color, size}) => (
-              <View>
-                <Feather name="home" color={color} size={size} />
+              <View style={styles.tabIconView}>
+                <Feather name="shopping-cart" color={color} size={20} />
                 <Text style={{color: color}}>Cart</Text>
               </View>
             ),
@@ -139,14 +140,14 @@ const Route = () => {
         />
 
         <Tab.Screen
-          name="bank"
-          component={Bank}
+          name="message"
+          component={Message}
           options={{
             headerShown: false,
             tabBarIcon: ({focused, color, size}) => (
-              <View>
-                <Feather name="home" color={color} size={size} />
-                <Text style={{color: color}}>Bank</Text>
+              <View style={styles.tabIconView}>
+                <Feather name="mail" color={color} size={20} />
+                <Text style={{color: color}}>Chat</Text>
               </View>
             ),
           }}
@@ -158,8 +159,8 @@ const Route = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({focused, color, size}) => (
-              <View>
-                <Feather name="home" color={color} size={size} />
+              <View style={styles.tabIconView}>
+                <Feather name="phone" color={color} size={20} />
                 <Text style={{color: color}}>call</Text>
               </View>
             ),

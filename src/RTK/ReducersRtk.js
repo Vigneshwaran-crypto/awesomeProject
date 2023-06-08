@@ -1,6 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {GET_API_DATA, HTTP, StaticValues} from '../Common/Constants';
+import {
+  GET_API_DATA,
+  HTTP,
+  JUST_STORE,
+  StaticValues,
+} from '../Common/Constants';
 import {LOG, Toast} from '../Common/utils';
 import {getSingleUser} from './RtkActions';
 
@@ -19,65 +24,74 @@ export const apiCall = createAsyncThunk(
     console.groupEnd();
 
     try {
-      let header = {};
-
-      if (action.noAuth) {
-        header = HTTP.HEADERS;
+      if (action.type && action.type == JUST_STORE) {
+        return {
+          requestType: action.requestType,
+          state: getState(),
+          requestData: action.jsonData,
+        };
       } else {
-        if (action.multipart) {
-          header = HTTP.formDataHeader;
+        let header = {};
+
+        if (action.noAuth) {
+          header = HTTP.HEADERS;
         } else {
-          header = HTTP.AuthHeader;
-        }
-      }
-
-      //default method for network call
-      let method = 'post';
-      if (action.get) {
-        method = 'get';
-      }
-
-      const config = {
-        method: method,
-        url: action.requestUrl.trim(),
-        data: action.multipart
-          ? action.jsonData
-          : JSON.stringify(action.jsonData),
-        headers: header,
-      };
-
-      console.group(
-        '%cNetwork Call Config 📡️',
-        'color:#19376D;font-size:10px',
-      );
-      LOG(config);
-      console.groupEnd();
-
-      const apiResponse = await axios(config, {timeout: 2});
-
-      console.group('%cRESPONSE GOD 🌈️:', 'color:black;font-size:11px');
-      LOG('Response Data :', apiResponse.data);
-      LOG('Response Status :', apiResponse.status);
-      console.groupEnd();
-
-      switch (action.requestType) {
-        case StaticValues.getUserDetails:
-          if (apiResponse.status == 200) {
-            dispatch(apiCall(getSingleUser()));
+          if (action.multipart) {
+            header = HTTP.formDataHeader;
+          } else {
+            header = HTTP.AuthHeader;
           }
-          break;
+        }
 
-        default:
-          console.warn('DEFAULT SWITCH IN MIDDLEWARE');
-          break;
+        //default method for network call
+        let method = 'post';
+        if (action.get) {
+          method = 'get';
+        }
+
+        const config = {
+          method: method,
+          url: action.requestUrl.trim(),
+          data: action.multipart
+            ? action.jsonData
+            : JSON.stringify(action.jsonData),
+          headers: header,
+        };
+
+        console.group(
+          '%cNetwork Call Config 📡️',
+          'color:#19376D;font-size:10px',
+        );
+        LOG(config);
+        console.groupEnd();
+
+        const apiResponse = await axios(config, {timeout: 2});
+
+        console.group('%cRESPONSE GOD 🌈️:', 'color:black;font-size:11px');
+        LOG('Response Data :', apiResponse.data);
+        LOG('Response Status :', apiResponse.status);
+        console.groupEnd();
+
+        switch (action.requestType) {
+          // case StaticValues.getUserDetails:
+          //   if (apiResponse.status == 200) {
+          //     // dispatch(apiCall(getSingleUser()));
+          //   }
+          //   break;
+
+          default:
+            console.warn('DEFAULT SWITCH IN MIDDLEWARE');
+            break;
+        }
+
+        return {
+          jsonData: apiResponse.data,
+          status: apiResponse.status,
+          requestType: action.requestType,
+          state: getState(),
+          requestData: action.jsonData,
+        };
       }
-
-      return {
-        jsonData: apiResponse.data,
-        status: apiResponse.status,
-        requestType: action.requestType,
-        state: getState(),
-      };
     } catch (err) {
       LOG('API DATA ERROR----------🔴️:', err);
 
@@ -105,7 +119,7 @@ const RtkSlice = createSlice({
     });
 
     builder.addCase(apiCall.fulfilled, (state, action) => {
-      // LOG('RESPONSE SAVED IN STORE :', action);
+      LOG('RESPONSE SAVED IN STORE :', action);
       state.loading = false;
 
       switch (action.payload.requestType) {
@@ -116,12 +130,17 @@ const RtkSlice = createSlice({
 
         case StaticValues.getUserDetails:
           // LOG('GET USER DETAILS IN REDUCER :', action.payload);
-          state.userDetails = action.payload.jsonData;
+          // state.userDetails = action.payload.jsonData;
           break;
 
         case StaticValues.getSingleUser:
           // LOG('GET SINGLE USER IN REDUCER :', action.payload);
           state.singleUser = action.payload.jsonData;
+          break;
+
+        case StaticValues.saveUserDetails:
+          LOG('save_userDetails_in_reducer :', action.payload);
+          state.userDetails = action.payload.requestData;
           break;
 
         default:
@@ -132,7 +151,8 @@ const RtkSlice = createSlice({
     });
 
     builder.addCase(apiCall.rejected, (state, action) => {
-      (state.loading = false), (state.apiError = action.payload.jsonData);
+      LOG('GET API DATA REJECTED :', action);
+      state.loading = false;
     });
   },
 });

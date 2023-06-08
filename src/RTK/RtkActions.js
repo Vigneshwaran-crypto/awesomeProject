@@ -1,4 +1,9 @@
-import {GET_API_DATA, HTTP, StaticValues} from '../Common/Constants';
+import {
+  GET_API_DATA,
+  HTTP,
+  JUST_STORE,
+  StaticValues,
+} from '../Common/Constants';
 import {LOG} from '../Common/utils';
 
 export const getAllProducts = jsonData => {
@@ -40,3 +45,12 @@ export const getSingleUser = jsonData => {
     get: true,
   };
 };
+
+// export const saveUserDetails = jsonData => {
+//   LOG('Save_User_details_IN_ACTION :', jsonData);
+//   return {
+//     type: JUST_STORE,
+//     requestType: StaticValues.saveUserDetails,
+//     jsonData: jsonData,
+//   };
+// };

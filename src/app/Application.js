@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Animated,
   Dimensions,
+  Easing,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,11 +14,16 @@ import {colors} from '../Common/colors';
 import {LOG} from '../Common/utils';
 import Feather from 'react-native-vector-icons/Feather';
 
+import {NativeModules} from 'react-native';
+
+const AnimeFeather = Animated.createAnimatedComponent(Feather);
+
 const win = Dimensions.get('window');
 
 const Application = () => {
   const navigation = useNavigation();
   // const [signal, setSignal] = useState(false);
+  const spin = new Animated.Value(0);
 
   const position = new Animated.ValueXY({x: 0, y: 0});
 
@@ -26,42 +32,40 @@ const Application = () => {
     outputRange: ['0deg', '360deg'],
   });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    Animated.timing(spin, {
+      toValue: 10,
+      duration: 3000,
+      useNativeDriver: true,
+      easing: Easing.linear,
+    }).start();
+  }, []);
+
+  const spinValue = spin.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['360deg', '0deg'],
+  });
 
   let signal = false;
 
   const screenClicked = () => {
-    navigation.navigate('logIn', {type: 'logIn'});
+    const {PlayDefault} = NativeModules;
 
-    const name = 'vigneshwaran';
+    PlayDefault.notificationTone();
 
-    // console.log('%c😁️', 'font-size:20px');
+    PlayDefault.getPhoneID()
+      .then(val => LOG('this is getting from java :', val))
+      .catch(err => LOG('error ', err));
 
-    // console.group(
-    //   `%c${name}`,
-    //   'color:#C6DE41;background:#3E432E;font-size:20px',
-    // );
-    // console.log(hello);
-    // console.groupEnd();
-
-    // if (signal) {
-    //   signal = false;
-    // } else {
-    //   signal = true;
-    // }
-    // if (signal) {
-    //   Animated.timing(position, {
-    //     toValue: {x: -win.width, y: 0},
-    //     duration: 500,
-    //     useNativeDriver: true,
-    //   }).start();
-    // } else {
-    //   Animated.timing(position, {
-    //     toValue: {x: 0, y: 0},
-    //     duration: 500,
-    //     useNativeDriver: true,
-    //   }).start();
-    // }
+    // navigation.navigate('logIn', {type: 'logIn'});
+    // axios
+    //   .get('http://172.16.16.98:3000')
+    //   .then(res => {
+    //     LOG('Response value form your backend :', res);
+    //   })
+    //   .catch(err => {
+    //     LOG('Catch from your backend :', err);
+    //   });
   };
 
   const reverse = () => {
@@ -83,7 +87,12 @@ const Application = () => {
         <Text>Hello</Text>
       </View>
 
-      <Feather name="home" size={20} color={colors.buttonBlue} />
+      <AnimeFeather
+        name="home"
+        size={50}
+        color={colors.buttonBlue}
+        style={{margin: 10, transform: [{rotate: spinValue}]}}
+      />
 
       <TouchableOpacity
         style={{padding: 40, backgroundColor: colors.activeGreen}}

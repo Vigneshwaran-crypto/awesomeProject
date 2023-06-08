@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Animated,
   FlatList,
   Image,
   SafeAreaView,
@@ -16,16 +17,25 @@ import {LOG, Toast} from '../Common/utils';
 import {Checkbox} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {apiCall} from '../RTK/ReducersRtk';
-import {getAllProducts, getUserDetails} from '../RTK/RtkActions';
+import {
+  getAllProducts,
+  getUserDetails,
+  saveUserDetails,
+} from '../RTK/RtkActions';
 import auth from '@react-native-firebase/auth';
 
 const LogIn = props => {
   const navigation = useNavigation();
-  const type = props.route.params.type;
-  const [isChecked, setIsCheck] = useState(false);
   const dispatch = useDispatch();
+
+  const type = props.route.params.type;
+
   const products = useSelector(({products}) => products);
 
+  const position = new Animated.ValueXY({x: 0, y: 0});
+
+  const [isChecked, setIsCheck] = useState(false);
+  const [tapTouches, setTapTouches] = useState(true);
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -80,28 +90,60 @@ const LogIn = props => {
     }
   };
 
-  const logInClick = () => {
-    const userNameValid = isValidMail();
-    if (!userNameValid) {
-      Toast('Please enter valid email');
-    } else if (!password) {
-      Toast('please enter the password');
-    } else if (!userName && !password) {
-      Toast('Please enter email and password ');
-    } else {
-      const sigIn = auth().signInWithEmailAndPassword(userName, password);
+  let touches = false;
 
-      sigIn
-        .then(res => {
-          LOG('res value of signIn :', res);
-          if (res.user._auth._authResult) {
-            navigation.navigate('modalTab');
-          }
-        })
-        .catch(err => {
-          LOG('catch in sigIn :', err);
-          Toast('Please enter valid credential');
-        });
+  const logInClick = () => {
+    // setTapTouches(!tapTouches);
+
+    navigation.navigate('modalTab');
+
+    if (touches) {
+      touches = false;
+    } else {
+      touches = true;
+    }
+
+    if (password.length < 4) {
+      LOG('less than 4');
+
+      if (touches) {
+        Animated.spring(position, {
+          toValue: {x: 70, y: 0},
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        Animated.spring(position, {
+          toValue: {x: -70, y: 0},
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      }
+      // Toast('Please enter valid password');
+    } else {
+      const userNameValid = isValidMail();
+      if (!userNameValid) {
+        Toast('Please enter valid email');
+      } else if (!password) {
+        Toast('please enter the password');
+      } else if (!userName && !password) {
+        Toast('Please enter email and password ');
+      } else {
+        const sigIn = auth().signInWithEmailAndPassword(userName, password);
+
+        sigIn
+          .then(res => {
+            LOG('res value of signIn :', res);
+            if (res.user._auth._authResult) {
+              navigation.navigate('modalTab');
+              // dispatch(apiCall(saveUserDetails(res)));
+            }
+          })
+          .catch(err => {
+            LOG('catch in sigIn :', err);
+            Toast('Please enter valid credential');
+          });
+      }
     }
   };
 
@@ -161,9 +203,11 @@ const LogIn = props => {
           </View>
 
           {type == 'logIn' ? (
-            <TouchableOpacity style={styles.joinButton} onPress={logInClick}>
-              <Text style={styles.joinButtontext}>Log In</Text>
-            </TouchableOpacity>
+            <Animated.View style={{transform: [{translateX: position.x}]}}>
+              <TouchableOpacity style={styles.joinButton} onPress={logInClick}>
+                <Text style={styles.joinButtontext}>Log In</Text>
+              </TouchableOpacity>
+            </Animated.View>
           ) : (
             <View style={styles.checkBoxView}>
               <Checkbox
@@ -249,10 +293,10 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     backgroundColor: '#0A66C2',
-
     paddingVertical: 15,
-    paddingHorizontal: 10,
     marginVertical: 20,
+    width: '30%',
+    alignSelf: 'center',
   },
   joinButtontext: {
     color: colors.white,

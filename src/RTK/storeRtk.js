@@ -8,7 +8,9 @@ const store = configureStore({
     products: RtkReducer,
     random: randomReducer,
   },
-  // middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
+  middleware: getDefaultMiddleware => getDefaultMiddleware(),
 });
 
 export default store;
+
+// middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
