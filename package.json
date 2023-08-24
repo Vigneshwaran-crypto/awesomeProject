@@ -24,6 +24,8 @@
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.4",
+    "react-native-account-manager": "^1.0.10",
+    "react-native-device-number": "^1.0.7",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-paper": "^5.5.2",
     "react-native-raw-bottom-sheet": "^2.2.0",

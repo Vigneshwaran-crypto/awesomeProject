@@ -30,6 +30,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {LOG} from '../Common/utils';
 import {navigationRef} from './RootNavigation';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import Practice from '../app/Practice';
 
 const Route = () => {
   const Stack = createNativeStackNavigator();
@@ -219,6 +220,12 @@ const Route = () => {
           component={Help}
           options={{headerShown: false}}
         /> */}
+
+        <Stack.Screen
+          name="practice"
+          component={Practice}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

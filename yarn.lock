@@ -6349,6 +6349,11 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-account-manager@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.npmjs.org/react-native-account-manager/-/react-native-account-manager-1.0.10.tgz"
+  integrity sha512-I988xGS9NCrRNIebZx2uRs3TTzI8Vrl37JzzeUXeiX2fN1QUK6ePSDa4lYy7cr+oDCC78GnV1zXrRUQSS4Hvbg==
+
 react-native-codegen@^0.71.5:
   version "0.71.5"
   resolved "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.71.5.tgz"
@@ -6358,6 +6363,11 @@ react-native-codegen@^0.71.5:
     flow-parser "^0.185.0"
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
+
+react-native-device-number@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/react-native-device-number/-/react-native-device-number-1.0.7.tgz"
+  integrity sha512-G1V1DulmaTVvnwdhvZDB8XqbjVyu7S6GuU22HhFUfJ6rSryhgS6u+Aj9M5qEMlpyFb5nEk6ADIPcp6eFH0csVg==
 
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"

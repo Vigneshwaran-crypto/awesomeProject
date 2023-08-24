@@ -27,7 +27,7 @@ const Application = () => {
 
   const position = new Animated.ValueXY({x: 0, y: 0});
 
-  const rotate = position.x.interpolate({
+  const rotate = position.y.interpolate({
     inputRange: [0, 100],
     outputRange: ['0deg', '360deg'],
   });
@@ -43,7 +43,7 @@ const Application = () => {
 
   const spinValue = spin.interpolate({
     inputRange: [0, 1],
-    outputRange: ['360deg', '0deg'],
+    outputRange: ['120deg', '0deg'],
   });
 
   let signal = false;
@@ -51,11 +51,13 @@ const Application = () => {
   const screenClicked = () => {
     const {PlayDefault} = NativeModules;
 
-    PlayDefault.notificationTone();
+    //Don'd remove these line
 
-    PlayDefault.getPhoneID()
-      .then(val => LOG('this is getting from java :', val))
-      .catch(err => LOG('error ', err));
+    // PlayDefault.notificationTone();
+
+    // PlayDefault.getPhoneID()
+    //   .then(val => LOG('this is getting from java :', val))
+    //   .catch(err => LOG('error ', err));
 
     // navigation.navigate('logIn', {type: 'logIn'});
     // axios
@@ -66,6 +68,8 @@ const Application = () => {
     //   .catch(err => {
     //     LOG('Catch from your backend :', err);
     //   });
+
+    navigation.navigate('practice');
   };
 
   const reverse = () => {
