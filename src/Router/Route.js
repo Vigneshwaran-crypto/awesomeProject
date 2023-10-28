@@ -1,8 +1,9 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {colors} from '../Common/colors';
+import messaging from '@react-native-firebase/messaging';
 
 //screens importing
 import Application from '../app/Application';
@@ -27,7 +28,13 @@ import Help from '../Screens/drawerMenu/Help';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {LOG} from '../Common/utils';
+import {
+  LOG,
+  getToken,
+  notificationListener,
+  onDisplayNotification,
+  requestUserPermission,
+} from '../Common/utils';
 import {navigationRef} from './RootNavigation';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Practice from '../app/Practice';
@@ -37,9 +44,29 @@ const Route = () => {
   const Tab = createBottomTabNavigator();
 
   const HomeTab = () => {
-    {
-      LOG('home tab summoned');
-    }
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+    const [initialRoute, setInitialRoute] = useState('Home');
+
+    useEffect(() => {
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        LOG('remoteMessage from base in router:', remoteMessage);
+
+        // const title = remoteMessage.notification.title;
+        // const body = remoteMessage.notification.body;
+
+        onDisplayNotification(remoteMessage.notification);
+      });
+
+      return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+      requestUserPermission();
+      notificationListener();
+      const token = getToken();
+    }, []);
 
     return (
       <Tab.Navigator

@@ -5,8 +5,11 @@ export const JUST_STORE = 'JUST_STORE';
 
 export const AuthToken = 'Bearer ';
 
+export const fireBaseServerKey =
+  'AAAAxgtn5dY:APA91bFb5n032RFNwdEyZJ0Gqc8Iwdr0-vcnVvqDMjet9tMHnVOWBfpFxzYfaUuEz6NLH0J1oLHZa4QMYyUkWLpNERXIDcOg6mMPOUmPOmRsAHdtBwjVhLMTcswiPLUeqV2-xPAvvWp1';
+export const clientToken =
+  'd4AdBfZjRnuVb8_AO2thBS:APA91bHhEQRUs-YDWMznTRFExJHMUz1TbMelirUBwctFy9cvvI2hVWqF61QK2163-JNMnk1gFCyKxPRjvFkzYefKSKYRiUPb0y8CZX-zPyX7UKDuYmCWiwWPB_v6iEIqKLD0OXEtGKbh';
 //API fetching constants
-
 export const StaticValues = {
   firstAction: 'firstAction',
   getAllProducts: 'getAllProducts',

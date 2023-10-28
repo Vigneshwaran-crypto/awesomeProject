@@ -1485,6 +1485,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.npmjs.org/@notifee/react-native/-/react-native-7.8.0.tgz"
+  integrity sha512-sx8h62U4FrR4pqlbN1rkgPsdamDt9Tad0zgfO6VtP6rNJq/78k8nxUnh0xIX3WPDcCV8KAzdYCE7+UNvhF1CpQ==
+
 "@react-native-community/cli-clean@^10.1.1":
   version "10.1.1"
   resolved "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-10.1.1.tgz"
@@ -1697,6 +1702,11 @@
   integrity sha512-GUodkLboEZInVHurmYU/OfZIoz+0NtvxoTvWzPmNxExGQOb6o/FxVzLTmW1PBc6RlufkMvBLT9MQiC5JnMUwfQ==
   dependencies:
     plist "^3.0.5"
+
+"@react-native-firebase/messaging@^18.6.0":
+  version "18.6.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.6.0.tgz"
+  integrity sha512-0fBDvbu13MJazAJhiT1rm//hnxhzOSu1ZpqmGUKpNu73llxPqVYDk4L8uZ7WBRtu3e6TP7Mw8IfH3gGB1qeelA==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -6385,6 +6395,11 @@ react-native-gradle-plugin@^0.71.16:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.17.tgz"
   integrity sha512-OXXYgpISEqERwjSlaCiaQY6cTY5CH6j73gdkWpK0hedxtiWMWgH+i5TOi4hIGYitm9kQBeyDu+wim9fA8ROFJA==
 
+react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
+
 react-native-paper@^5.5.2:
   version "5.5.2"
   resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.5.2.tgz"
@@ -6429,6 +6444,11 @@ react-native-screens@^3.20.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-shimmer-kit@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/react-native-shimmer-kit/-/react-native-shimmer-kit-0.3.1.tgz"
+  integrity sha512-Y0i8Xg4gI2HXc8QEVXCq1M6JeT7gkCuP/mwhpKZ5KFOhbqcPboQ8xOfpQxcoVQy/5dHv3PxoL6C1FbG5bzEAsg==
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"
