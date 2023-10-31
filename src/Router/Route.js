@@ -66,6 +66,7 @@ const Route = () => {
       requestUserPermission();
       notificationListener();
       const token = getToken();
+      LOG('toekn value in router :', token);
     }, []);
 
     return (

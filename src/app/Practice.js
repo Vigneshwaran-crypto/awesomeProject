@@ -25,22 +25,22 @@ const Practice = () => {
   const [contact, setContact] = useState('');
   const [email, setEmail] = useState('');
 
-  //proper working modal for push notification
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  //     LOG('remoteMessage from base :', remoteMessage);
-  //     onDisplayNotification(remoteMessage.notification);
-  //   });
+  // proper working modal for push notification
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      LOG('remoteMessage from base :', remoteMessage);
+      onDisplayNotification(remoteMessage.notification);
+    });
 
-  //   return unsubscribe;
-  // }, []);
+    return unsubscribe;
+  }, []);
 
-  // useEffect(() => {
-  //   requestUserPermission();
-  //   notificationListener();
-  //   const token = getToken();
-  // }, []);
+  useEffect(() => {
+    requestUserPermission();
+    notificationListener();
+    const token = getToken();
+  }, []);
 
   const onSavePress = () => {};
 
