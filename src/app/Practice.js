@@ -16,10 +16,16 @@ import {
   onDisplayNotification,
   requestUserPermission,
 } from '../Common/utils';
-import {textFontFaceMedium, textFontFaceSemiBold} from '../Common/styles';
+import {
+  textFontFaceLight,
+  textFontFaceMedium,
+  textFontFaceSemiBold,
+} from '../Common/styles';
 import {firebase} from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 
 const Practice = () => {
+  const navigation = useNavigation();
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [contact, setContact] = useState('');
@@ -42,7 +48,9 @@ const Practice = () => {
     const token = getToken();
   }, []);
 
-  const onSavePress = () => {};
+  const onSavePress = () => {
+    navigation.navigate('wizdomLog');
+  };
 
   return (
     <View style={styles.container}>
@@ -105,7 +113,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-around',
   },
   titleText: {
-    fontFamily: textFontFaceMedium,
+    fontFamily: textFontFaceLight,
     color: colors.darkGreen,
     alignSelf: 'center',
     fontSize: 25,

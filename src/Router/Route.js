@@ -38,6 +38,8 @@ import {
 import {navigationRef} from './RootNavigation';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Practice from '../app/Practice';
+import login from '../wizdom/login';
+import LoginWiz from '../wizdom/login';
 
 const Route = () => {
   const Stack = createNativeStackNavigator();
@@ -252,6 +254,12 @@ const Route = () => {
         <Stack.Screen
           name="practice"
           component={Practice}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="wizdomLog"
+          component={LoginWiz}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

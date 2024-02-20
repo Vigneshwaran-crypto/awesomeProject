@@ -72,17 +72,17 @@ export const apiCall = createAsyncThunk(
         LOG('Response Status :', apiResponse.status);
         console.groupEnd();
 
-        switch (action.requestType) {
-          // case StaticValues.getUserDetails:
-          //   if (apiResponse.status == 200) {
-          //     // dispatch(apiCall(getSingleUser()));
-          //   }
-          //   break;
+        // switch (action.requestType) {
+        //   // case StaticValues.getUserDetails:
+        //   //   if (apiResponse.status == 200) {
+        //   //     // dispatch(apiCall(getSingleUser()));
+        //   //   }
+        //   //   break;
 
-          default:
-            console.warn('DEFAULT SWITCH IN MIDDLEWARE');
-            break;
-        }
+        //   default:
+        //     console.warn('DEFAULT SWITCH IN MIDDLEWARE');
+        //     break;
+        // }
 
         return {
           jsonData: apiResponse.data,
